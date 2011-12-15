@@ -1,11 +1,76 @@
 surveyor - mail server testing scripts
-
 2011 (c) Francesco Gigli <jaramir@gmail.com>
+
+--------------------------------------------------------------------------------
 
 # TODO explain how to use
 
-smtp.py
+--------------------------------------------------------------------------------
 
-imap.py
+$ smtp.py -h
+usage: smtp.py [-h] [--gtube] [--eicar] [--tls] [--ssl]
+               [--auth USERNAME PASSWORD] [--subject SUBJECT] [--text TEXT]
+               from_addr rcpt_addr server [port]
 
-pop3.py
+SMTP Testing Utility
+
+positional arguments:
+  from_addr             Email FROM Address
+  rcpt_addr             Email RCPT Address
+  server                SMTP Server Hostname or IP
+  port                  SMTP Server TCP Port
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --gtube               Send GTUBE AntiSpam Test
+  --eicar               Send EICAR AntiVirus Test
+  --tls                 Use TLS to encrypt traffic
+  --ssl                 Use SSL to encrypt the connection
+  --auth USERNAME PASSWORD
+                        Use SMTP AUTH with provided credentials
+  --subject SUBJECT     Email Subject
+  --text TEXT           Email Text
+
+--------------------------------------------------------------------------------
+
+$ imap.py -h
+usage: imap.py [-h] [--folder FOLDER] [--port PORT] [--ssl] [--cram-md5]
+               username password server [message]
+
+IMAP Testing Utility
+
+positional arguments:
+  username         Username
+  password         Password
+  server           IMAP Server Hostname or IP
+  message          Message ID to read
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --folder FOLDER  IMAP Folder to test (defualt: INBOX)
+  --port PORT      IMAP Server TCP Port (default: 143 or 993)
+  --ssl            Use SSL to encrypt the connection
+  --cram-md5       Use CRAM-MD5 authentication
+
+--------------------------------------------------------------------------------
+
+$ pop3.py -h
+usage: pop3.py [-h] [--port PORT] [--ssl] [--apop]
+               username password server [message]
+
+POP3 Testing Utility
+
+positional arguments:
+  username     Username
+  password     Password
+  server       POP3 Server Hostname or IP
+  message      Message ID to read
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --port PORT  POP3 Server TCP Port (default: 110 or 995)
+  --ssl        Use SSL to encrypt the connection
+  --apop       Use APOP authentication
+
+--------------------------------------------------------------------------------
+
