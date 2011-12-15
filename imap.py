@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8; -*-
-# IMAP Server Tester
+# IMAP Testing Utility
 # Copyright © 2011 Francesco Gigli <jaramir@gmail.com>
 
 import imaplib
 import argparse
 
+# TODO: TLS
+# TODO: list folders?
+
 # parse args
 
-parser = argparse.ArgumentParser( description = "SMTP Testing Utility" )
+parser = argparse.ArgumentParser( description = "IMAP Testing Utility" )
     
 parser.add_argument( "username",   action="store",      help="Username" )
 parser.add_argument( "password",   action="store",      help="Password" )
@@ -16,7 +19,6 @@ parser.add_argument( "server",     action="store",      help="IMAP Server Hostna
 parser.add_argument( "message",    action="store",      help="Message ID to read", default=None, nargs="?" )
 parser.add_argument( "--folder",   action="store",      help="IMAP Folder to test (defualt: INBOX)" )
 parser.add_argument( "--port",     action="store",      help="IMAP Server TCP Port (default: 143 or 993)" )
-#parser.add_argument( "--tls",      action="store_true", help="Use TLS to encrypt traffic" )
 parser.add_argument( "--ssl",      action="store_true", help="Use SSL to encrypt the connection" )
 parser.add_argument( "--cram-md5", action="store_true", help="Use CRAM-MD5 authentication" )
 
@@ -34,9 +36,6 @@ if args.ssl:
 else:
     port = args.port if args.port else 143
     imap = imaplib.IMAP4( args.server, port )
-
-#if args.tls:
-#    imap.starttls()
 
 # auth
 
@@ -61,3 +60,4 @@ else:
 
 imap.close()
 imap.logout()
+

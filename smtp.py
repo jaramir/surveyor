@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8; -*-
-# SMTP Server Tester
+# SMTP Testing Utility
 # Copyright © 2011 Francesco Gigli <jaramir@gmail.com>
 
 import smtplib

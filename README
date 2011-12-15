@@ -2,6 +2,10 @@ surveyor - mail server testing scripts
 
 2011 (c) Francesco Gigli <jaramir@gmail.com>
 
-scripts:
-	smtp.py
-	imap.py
+# TODO explain how to use
+
+smtp.py
+
+imap.py
+
+pop3.py
