@@ -5,26 +5,81 @@
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 import email.utils
 import argparse
 
+GTUBE = "XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X"
+EICAR = "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
+
 # parse args
 
 parser = argparse.ArgumentParser( description = "SMTP Testing Utility" )
-    
-parser.add_argument( "from_addr", action="store",      help="Email FROM Address" )
-parser.add_argument( "rcpt_addr", action="store",      help="Email RCPT Address" )
-parser.add_argument( "server",    action="store",      help="SMTP Server Hostname or IP" )
-parser.add_argument( "port",      action="store",      help="SMTP Server TCP Port", default=25, nargs="?" )
-parser.add_argument( "--gtube",   action="store_true", help="Send GTUBE AntiSpam Test" )
-parser.add_argument( "--eicar",   action="store_true", help="Send EICAR AntiVirus Test" )
-parser.add_argument( "--tls",     action="store_true", help="Use TLS to encrypt traffic" )
-parser.add_argument( "--ssl",     action="store_true", help="Use SSL to encrypt the connection" )
-parser.add_argument( "--auth",    action="store",      help="Use SMTP AUTH with provided credentials",
-                                                                                    default=False, nargs=2, metavar=( "USERNAME", "PASSWORD" ) )
-parser.add_argument( "--subject", action="store",      help="Email Subject",        default="Test message" )
-parser.add_argument( "--text",    action="store",      help="Email Text",           default="This is a test message" )
+
+argdef = (
+    ( "from_addr", {
+        "action": "store",
+        "help": "Email FROM Address",
+    } ),
+    ( "rcpt_addr", {
+        "action": "store",
+        "help": "Email RCPT Address",
+    } ),
+    ( "server", {
+        "action": "store",
+        "help": "SMTP Server Hostname or IP",
+    } ),
+    ( "port", {
+        "action": "store",
+        "default": 25,
+        "type": int,
+        "nargs": "?",
+        "help": "SMTP Server TCP Port",
+    } ),
+    ( "--gtube", {
+        "action": "store_true",
+        "help": "Send GTUBE AntiSpam Test",
+    } ),
+    ( "--eicar", {
+        "action": "store_true",
+        "help": "Send EICAR AntiVirus Test",
+    } ),
+    ( "--tls", {
+        "action": "store_true",
+        "help": "Use TLS to encrypt traffic",
+    } ),
+    ( "--ssl", {
+        "action": "store_true",
+        "help": "Use SSL to encrypt the connection",
+    } ),
+    ( "--auth", {
+        "action": "store",
+        "default": False,
+        "nargs": 2,
+        "metavar": ( "USERNAME", "PASSWORD" ),
+        "help": "Use SMTP AUTH with provided credentials",
+    } ),
+    ( "--subject", {
+        "action": "store",
+        "default": "Test message",
+        "help": "Email Subject",
+    } ),
+    ( "--text", {
+        "action": "store",
+        "default": "This is a test message",
+        "help": "Email Text",
+    } ),
+    ( "--attachment", {
+        "action": "store",
+        "default": False,
+        "type": int,
+        "help": "Attach a binary file of the specified size in bytes",
+    } ),
+    )
+
+for arg in argdef:
+    parser.add_argument( arg[0], **arg[1] )
 
 args = parser.parse_args()
 
@@ -39,10 +94,16 @@ msg["Date"] = email.utils.formatdate()
 msg.attach( MIMEText( args.text ) )
 
 if args.gtube:
-    msg.attach( MIMEText( "XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X" ) )
+    msg.attach( MIMEText( GTUBE ) )
 
 if args.eicar:
-    msg.attach( MIMEText( "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*" ) )
+    msg.attach( MIMEText( EICAR ) )
+
+if args.attachment:
+    with open( "/dev/urandom" ) as rnd:
+        attachment = MIMEApplication( rnd.read( args.attachment ) )
+    attachment.add_header( "content-disposition", "attachment", filename="attach.bin" )
+    msg.attach( attachment )
 
 # connect and send
 
