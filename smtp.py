@@ -100,7 +100,7 @@ if args.eicar:
     msg.attach( MIMEText( EICAR ) )
 
 if args.attachment:
-    with open( "/dev/urandom" ) as rnd:
+    with open( "/dev/urandom", "rb" ) as rnd:
         attachment = MIMEApplication( rnd.read( args.attachment ) )
     attachment.add_header( "content-disposition", "attachment", filename="attach.bin" )
     msg.attach( attachment )
